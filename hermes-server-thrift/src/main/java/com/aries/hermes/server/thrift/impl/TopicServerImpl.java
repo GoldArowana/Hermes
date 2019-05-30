@@ -103,7 +103,7 @@ public class TopicServerImpl implements TopicServer.Iface {
     }
 
     @Override
-    public TopicThriftResponse batchQueryTopics(CompanyDTO companyDTO, int page, int pagesize) {
+    public TopicThriftResponse batchQueryTopics(CompanyDTO companyDTO, long categoryId, int page, int pagesize) {
         CompanyHelper companyHelper = new CompanyHelper(companyDTO).check();
         TopicThriftResponse response = new TopicThriftResponse();
         if (companyHelper.isError()) {
@@ -112,7 +112,7 @@ public class TopicServerImpl implements TopicServer.Iface {
             return response;
         }
         try {
-            List<Topic> topicList = TopicRepository.batchQueryTopics(companyHelper.getDatabaseName(), page, pagesize);
+            List<Topic> topicList = TopicRepository.batchQueryTopics(companyHelper.getDatabaseName(), categoryId,page, pagesize);
             response.setCode(SUCCESS.of().getCode());
             response.setMessage(SUCCESS.of().getMessage());
             response.setTopicDTO(convert2TopicDTOList(topicList));

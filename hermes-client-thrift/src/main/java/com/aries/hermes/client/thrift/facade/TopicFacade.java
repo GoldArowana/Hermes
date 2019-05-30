@@ -30,7 +30,7 @@ public class TopicFacade {
         return ThriftHelper.call("Hermes", TopicServer.Client.class, client -> client.addTopic(companyDTO, TopicVO.toDTO(topicVO)));
     }
 
-    public static List<TopicVO> batchQueryTopics(int page, int pageSize) throws PageSizeLimitException, CallFailedException {
+    public static List<TopicVO> batchQueryTopics(long categoryId, int page, int pageSize) throws PageSizeLimitException, CallFailedException {
         if (page <= 0) {
             return Collections.emptyList();
         } else if (pageSize > 100) {
@@ -38,7 +38,7 @@ public class TopicFacade {
         }
         TopicThriftResponse topicThriftResponse = null;
         try {
-            topicThriftResponse = ThriftHelper.call("Hermes", TopicServer.Client.class, client -> client.batchQueryTopics(companyDTO, page, pageSize));
+            topicThriftResponse = ThriftHelper.call("Hermes", TopicServer.Client.class, client -> client.batchQueryTopics(companyDTO,categoryId, page, pageSize));
         } catch (TTransportException e) {
             throw new CallFailedException("TTransportException", e);
         } catch (ServiceNotFoundException e) {

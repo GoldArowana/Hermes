@@ -110,7 +110,7 @@ public class TopicServerTest {
 
     @Test
     public void batchQueryTopicsTest() {
-        TopicThriftResponse response = server.batchQueryTopics(companyDTO, 1, 2);
+        TopicThriftResponse response = server.batchQueryTopics(companyDTO, 0,1, 2);
         response.getTopicDTO().forEach(System.out::println);
         System.out.println(response.getMessage());
     }

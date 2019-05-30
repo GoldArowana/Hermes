@@ -56,7 +56,7 @@ public class TopicRepositoryTest {
      */
     @Test
     public void batchQueryTopics() throws BatchQueryException {
-        List<Topic> topicList = TopicRepository.batchQueryTopics("hermes_aries_edu", 1, 1);
+        List<Topic> topicList = TopicRepository.batchQueryTopics("hermes_aries_edu", 0, 1, 1);
         if (!CollectionUtils.isEmpty(topicList)) {
             System.out.println(topicList);
         }

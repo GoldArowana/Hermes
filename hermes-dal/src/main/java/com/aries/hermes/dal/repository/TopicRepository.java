@@ -75,7 +75,7 @@ public class TopicRepository {
      * @return
      * @throws BatchQueryException
      */
-    public static List<Topic> batchQueryTopics(String database, int page, int pageSize) throws BatchQueryException {
+    public static List<Topic> batchQueryTopics(String database, long categoryId, int page, int pageSize) throws BatchQueryException {
         if (page < 1 || pageSize > 100) {
             String errorTemplate = "批量查询失败. page需要大于1, 实际:%d. pageSize需要小于等于100, 实际:%d";
             throw new BatchQueryException(String.format(errorTemplate, page, pageSize));
@@ -84,6 +84,10 @@ public class TopicRepository {
             TopicMapper mapper = sqlSession.getMapper(TopicMapper.class);
             Example example = new Example(Topic.class);
             example.orderBy("updateTime").desc();
+            if (categoryId > 0) {
+                example.createCriteria().andEqualTo("categoryId", categoryId);
+            }
+
             // 计算offset和limit
             int offset = (page - 1) * pageSize;
             int limit = pageSize;
@@ -144,7 +148,9 @@ public class TopicRepository {
         try (SqlSession sqlsession = SqlSessionUtil.openSession(database)) {
             TopicMapper mapper = sqlsession.getMapper(TopicMapper.class);
             Example example = new Example(Topic.class);
-            example.createCriteria().andEqualTo("categoryId", categoryId);
+            if (categoryId > 0) {
+                example.createCriteria().andEqualTo("categoryId", categoryId);
+            }
             return mapper.selectCountByExample(example);
         }
     }

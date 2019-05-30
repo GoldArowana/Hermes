@@ -21,7 +21,7 @@ public class TopicFacadeTest {
 
     @Test
     public void batchQueryTopics() throws TTransportException, CallFailedException, PageSizeLimitException {
-        System.out.println(JSON.toJSONString(TopicFacade.batchQueryTopics(1, 10)));
+        System.out.println(JSON.toJSONString(TopicFacade.batchQueryTopics(0,1, 10)));
     }
 
     @Test
