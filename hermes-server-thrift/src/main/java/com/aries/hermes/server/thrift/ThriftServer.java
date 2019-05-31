@@ -14,7 +14,7 @@ import com.aries.hermes.server.thrift.impl.TopicServerImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.thrift.TMultiplexedProcessor;
 import org.apache.thrift.server.TServer;
-import org.apache.thrift.server.TSimpleServer;
+import org.apache.thrift.server.TThreadPoolServer;
 import org.apache.thrift.transport.TServerSocket;
 import org.apache.thrift.transport.TServerTransport;
 
@@ -62,7 +62,12 @@ public class ThriftServer {
 
             // 设置端口
             TServerTransport serverTransport = new TServerSocket(PORT);
-            TServer server = new TSimpleServer(new TServer.Args(serverTransport).processor(processor));
+            TThreadPoolServer.Args args = new TThreadPoolServer.Args(serverTransport)
+                    .processor(processor)
+                    .maxWorkerThreads(16)
+                    .minWorkerThreads(2)
+                    .requestTimeout(5000);
+            TServer server = new TThreadPoolServer(args);
             log.info("服务启动,端口:{}", PORT);
 
             // 用新线程开启服务。
